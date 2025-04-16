@@ -13,7 +13,7 @@ class ProductController extends Controller
     public function index()
     {
         try {
-            $products = Product::with(['brand', 'category', 'images'])->get();
+            $products = Product::with(['brand', 'category', 'images', 'colors'])->has("colors")->get();
             return response()->json([
                 "message" => "List of products",
                 "data" => $products
@@ -63,7 +63,7 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = Product::with(['brand', 'category', 'images'])->find($id);
+            $product = Product::with(['brand', 'category', 'images', "colors"])->find($id);
             if (!$product) {
                 return response()->json([
                     "message" => "Product not found"
