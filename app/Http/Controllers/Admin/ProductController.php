@@ -64,6 +64,7 @@ class ProductController extends Controller
     {
         try {
             $product = Product::with(['brand', 'category', 'images', "colors"])->find($id);
+            $product->increment('view_count');
             if (!$product) {
                 return response()->json([
                     "message" => "Product not found"

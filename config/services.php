@@ -34,5 +34,10 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
+    'vnpay' => [
+        'tmn_code' => '79J37G5G',
+        'hash_secret' => '48Z2VX79XNF8DNOZ4ND9U3DFGEUB8CM6',
+        'url' => 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html',
+        'return_url' => 'http://localhost:5173/profiles/Delivery-history'
+    ],
 ];

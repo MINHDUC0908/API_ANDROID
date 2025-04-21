@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\CartItem;
 use App\Models\Color;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -105,6 +106,122 @@ class CartController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error occurred while fetching cart',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function checked($id)
+    {
+        try {   
+            $cartItem = CartItem::find($id);
+            if (!$cartItem) {
+                return response()->json([
+                    'message' => 'Cart item not found',
+                ], 404);
+            }
+    
+            // Đảo trạng thái: 0 thành 1, 1 thành 0
+            $cartItem->checked = $cartItem->checked ? 0 : 1;
+    
+            $cartItem->save();
+    
+            return response()->json([
+                'message' => 'Cart item checked status toggled successfully',
+                'data' => $cartItem,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error occurred while toggling cart item checked status',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }    
+    public function checkedAll()
+    {
+        try {
+            $user_id = Auth::id();
+            if (!$user_id) {
+                return response()->json([
+                    'message' => 'User not authenticated',
+                ], 401);
+            }
+
+            $cart = Cart::with(['cartItems.product', 'cartItems.color', 'cartItems.product.images'])
+                ->where('user_id', $user_id)
+                ->first();
+
+            if (!$cart) {
+                return response()->json([
+                    'message' => 'Cart not found',
+                ], 404);
+            }
+
+            foreach ($cart->cartItems as $item) {
+                $item->checked = $item->checked = 1;
+                $item->save();
+            }
+
+            return response()->json([
+                'message' => 'All cart items checked status toggled successfully',
+                'data' => $cart,
+            ], 200);
+        } catch(\Exception $e) {
+            return response()->json([
+                'message' => 'Error occurred while toggling cart item checked status',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function quantity($id)
+    {
+        try {
+            $cartItem = CartItem::find($id);
+            if (!$cartItem) {
+                return response()->json([
+                    'message' => 'Cart item not found',
+                ], 404);
+            }
+
+            $quantity = request()->input('quantity');
+            if ($quantity < 1) {
+                return response()->json([
+                    'message' => 'Quantity must be greater than 0',
+                ], 400);
+            }
+
+            $cartItem->quantity = $quantity;
+            $cartItem->total = $cartItem->quantity * $cartItem->product->price;
+            $cartItem->save();
+
+            return response()->json([
+                'message' => 'Cart item quantity updated successfully',
+                'data' => $cartItem,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error occurred while updating cart item quantity',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function delete($id)
+    {
+        try {
+            $cartItem = CartItem::find($id);
+            if (!$cartItem) {
+                return response()->json([
+                    'message' => 'Cart item not found',
+                ], 404);
+            }
+
+            $cartItem->delete();
+
+            return response()->json([
+                'message' => 'Cart item deleted successfully',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error occurred while deleting cart item',
                 'error' => $e->getMessage(),
             ], 500);
         }
