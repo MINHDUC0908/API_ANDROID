@@ -13,7 +13,9 @@ class Order extends Model
         'payment_method',
         'status',
         "order_number",
-        "payment_status"
+        "payment_status",
+        "coupon_id",
+        "discount_amount"
     ];
 
     public function user()
@@ -37,5 +39,9 @@ class Order extends Model
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
+    }
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 }

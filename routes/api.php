@@ -9,6 +9,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Customer\BrandController as CustomerBrandController;
 use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Customer\CouponController as CustomerCouponController;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\Customer\ProductController as CustomerProductController;
 use App\Http\Controllers\Customer\ShiipingController;
@@ -42,6 +44,10 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get("/incrementBrand", [CustomerBrandController::class, 'index']);
 
     Route::get('/getProductWithBrand', [CustomerBrandController::class, 'getProductWithBrand']);
+
+
+
+    Route::post("coupon/store", [CouponController::class, "store"]);
 });
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout']);
@@ -59,4 +65,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::post('/order/store', [OrderController::class, 'store']);
+
+    Route::post("coupon/apply", [CustomerCouponController::class, 'apply_discount_code']);
 });

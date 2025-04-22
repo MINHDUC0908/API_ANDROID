@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Customer\OrderController;
+use App\Http\Controllers\Customer\VNPayController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -10,7 +11,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/vnpay-return', [OrderController::class, 'vnpayReturn'])->name('vnpay.return');
+Route::get('/vnpay-return', [VNPayController::class, 'vnpayReturn'])->name('vnpay.return');
 Route::get('/zalopay-return', [OrderController::class, 'zalopayReturn'])->name('zalopay.return');
 
 
