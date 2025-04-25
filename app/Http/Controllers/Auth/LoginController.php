@@ -36,6 +36,10 @@ class LoginController extends Controller
                         'id' => $user->id,
                         'name' => $user->name,
                         'email' => $user->email,
+                        "phone" => $user->phone,
+                        "gender" => $user->gender,
+                        "birth_date" => $user->birth_date,
+                        "image" => $user->image
                     ],
                     'token' => $token,
                 ],
@@ -66,6 +70,10 @@ class LoginController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                "phone" => $user->phone,
+                "gender" => $user->gender,
+                "birth_date" => $user->birth_date,
+                "image" => $user->image
             ],
         ], 200);
     }

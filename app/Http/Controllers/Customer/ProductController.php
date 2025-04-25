@@ -27,4 +27,17 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+    public function filter(Request $request)
+    {
+        try {
+            $price = $request->input("price");
+            
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => "Lỗi khi tải dữ liệu!!!",
+                "error" => $e->getMessage(),
+            ]);
+        }
+    }
 }

@@ -9,6 +9,7 @@ use App\Models\Color;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -222,6 +223,46 @@ class CartController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error occurred while deleting cart item',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function count()
+    {
+        try {
+            $user = Auth::id();
+            if (!$user) {
+                return response()->json([
+                    "message" => "Vui lòng đăng nhập để sử dụng tài nguyên"
+                ], 401);
+            }
+
+            $cart = Cart::where('user_id', $user)
+                ->whereHas('cartItems', function ($query) {
+                    // Kiểm tra nếu Cart có CartItems
+                    $query->whereNotNull('id');
+                })
+                ->withCount('cartItems') // Đếm số lượng CartItem
+                // ->withSum('cartItems', 'quantity')
+                ->first();
+            
+            Log::info('Cart Query Result:', ['cart' => $cart]);
+
+            // Kiểm tra xem giỏ hàng có tồn tại không
+            if ($cart) {
+                $totalItems = $cart->cart_items_count; // Lấy số lượng CartItem
+            } else {
+                $totalItems = 0; // Nếu giỏ hàng không tồn tại hoặc trống
+            }
+
+            return response()->json([
+                "message" => "Số lượng sản phẩm trong giỏ hàng",
+                "data" => $totalItems
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Đã xảy ra lỗi khi đếm số lượng giỏ hàng',
                 'error' => $e->getMessage(),
             ], 500);
         }

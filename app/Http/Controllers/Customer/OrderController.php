@@ -7,6 +7,7 @@ use App\Mail\PaymentSuccess;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Coupon;
+use App\Models\LoyaltyPoint;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
@@ -18,8 +19,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-
-use function PHPUnit\Framework\returnSelf;
 
 class OrderController extends Controller
 {
@@ -84,7 +83,19 @@ class OrderController extends Controller
                 // Cập nhật tổng giá trị sau khi giảm giá
                 $totalPrice -= $discount;
             }
-    
+            $pointCode = $request->input("point");
+            if ($pointCode)
+            {
+                $point = LoyaltyPoint::where("total_points", "<", $pointCode)->first();
+                if ($point)
+                {
+                    return response()->json([
+                        "message" => "Bạn không đủ điểm để quy đổi!!!",
+                    ]);
+                }
+                $total_point = $pointCode * 0.01; // Quy đổi 1 điểm = 0.01 giá trị tiền
+                $totalPrice -= $total_point; // Trừ điểm vào tổng giá trị thanh toán
+            }
             // Khởi tạo biến $order
             $order = null;
     
@@ -140,6 +151,9 @@ class OrderController extends Controller
                     $coupon->decrement('quantity'); // Trừ đi 1
                 }
 
+                // Tích điểm
+                $loyalty = new LoyaltyController();
+                $loyalty->handleSuccessfulPayment($totalPrice, $pointCode);
                 
                 $cartItemsArray = $cartItems->toArray();
                 $cart->cartItems()->where("checked", 1)->delete();
