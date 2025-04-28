@@ -15,4 +15,8 @@ class Image extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public function color()
+    {
+        return $this->belongsTo(Color::class);
+    }
 }

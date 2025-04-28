@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\LoyaltyPoint;
 use App\Models\PointTransaction;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,6 +59,32 @@ class LoyaltyController extends Controller
         return response()->json([
             'message' => "Bạn đã nhận được $earnedPoints điểm cho đơn hàng này! Tổng giá trị thanh toán sau khi sử dụng điểm là " . number_format($totalPrice) . " VNĐ."
         ]);
+    }
+
+
+    public function index()
+    {
+        try {
+            $user = Auth::id();
+            if (!$user)
+            {
+                return response()->json([
+                    "message" => "Vui lòng đăng nhập để sử dụng tài nguyên",
+                ]);
+            }
+
+            $loyalty = LoyaltyPoint::where("user_id", $user)->get();
+            return response()->json([
+                "message"=> "Hiển thị thành công!!",
+                "data" => $loyalty
+            ]);
+        } catch (Exception $e)
+        {
+            return response()->json([
+                "message" => "Đã xảy ra lỗi!!!",
+                "error" => $e->getMessage(),
+            ]);
+        }
     }
 }
 

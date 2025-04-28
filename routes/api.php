@@ -13,9 +13,11 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Customer\CheckOrderController;
 use App\Http\Controllers\Customer\ContactController;
 use App\Http\Controllers\Customer\CouponController as CustomerCouponController;
+use App\Http\Controllers\Customer\LoyaltyController;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\Customer\ProductController as CustomerProductController;
 use App\Http\Controllers\Customer\ProfileController;
+use App\Http\Controllers\Customer\RatingController;
 use App\Http\Controllers\Customer\ShiipingController;
 use Illuminate\Support\Facades\Route;
 
@@ -80,10 +82,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get("checkorder", [CheckOrderController::class, "checkorder"]);
     Route::get("orderItem", [CheckOrderController::class, "orderItem"]);
+
+    // Đổi điểm
+    Route::get("loyalty", [LoyaltyController::class, "index"]);
+
+    // Đánh giá
+    Route::post("rating/store", [RatingController::class, "store"]);
 });
 
-
+Route::get("filter", [CustomerProductController::class, "filter"]);
 Route::post("contact", [ContactController::class, "store"]);
-
+Route::get("rating", [RatingController::class, "index"]);
 
 // php artisan serve --host=192.168.1.98 --port=8000

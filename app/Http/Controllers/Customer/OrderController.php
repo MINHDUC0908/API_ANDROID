@@ -93,7 +93,7 @@ class OrderController extends Controller
                         "message" => "Bạn không đủ điểm để quy đổi!!!",
                     ]);
                 }
-                $total_point = $pointCode * 0.01; // Quy đổi 1 điểm = 0.01 giá trị tiền
+                $total_point = $pointCode * 10; // Quy đổi 1 điểm = 0.01 giá trị tiền
                 $totalPrice -= $total_point; // Trừ điểm vào tổng giá trị thanh toán
             }
             // Khởi tạo biến $order

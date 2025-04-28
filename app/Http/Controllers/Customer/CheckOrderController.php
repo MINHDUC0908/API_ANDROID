@@ -56,7 +56,7 @@ class CheckOrderController extends Controller
                 ], 401);
             }
 
-            $orderNumber = $request->input("order_number");
+            $orderNumber = $request->query("order_number");
 
             // Lấy đơn hàng của user đang đăng nhập kèm theo order items và các thông tin cần thiết
             $order = Order::where("order_number", $orderNumber)

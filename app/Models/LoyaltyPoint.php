@@ -19,9 +19,9 @@ class LoyaltyPoint extends Model
         $points = $this->lifetime_points;
 
         return match (true) {
-            $points >= 10000 => 'diamond',
-            $points >= 5000 => 'gold',
-            $points >= 1000 => 'silver',
+            $points >= 100000 => 'diamond',
+            $points >= 50000 => 'gold',
+            $points >= 10000 => 'silver',
             default => 'normal',
         };
     }

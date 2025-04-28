@@ -63,7 +63,7 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = Product::with(['brand', 'category', 'images', "colors"])->find($id);
+            $product = Product::with(['brand', 'category', 'images.color', "colors"])->find($id);
             $product->increment('view_count');
             if (!$product) {
                 return response()->json([
