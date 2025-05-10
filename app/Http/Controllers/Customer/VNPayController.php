@@ -125,7 +125,7 @@ class VNPayController extends Controller
                         $cart->cartItems()->where("checked", 1)->delete();
                     }
 
-                    return redirect()->away("http://localhost:5173/payment/success?transaction_id=$vnp_TxnRef&total_amount={$order->total}");
+                    return redirect()->away("http://localhost:5173/payment/success?transaction_id=$vnp_TxnRef&total_amount={$order->total_amount}");
                 } else {
                     return redirect()->away("http://localhost:5173/payment/failed?message=Đơn hàng không tồn tại");
                 }

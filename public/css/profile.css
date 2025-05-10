@@ -1,0 +1,42 @@
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df, #224abe);
+}
+
+.bg-success-subtle {
+    background-color: rgba(25, 135, 84, 0.15);
+}
+
+.bg-warning-subtle {
+    background-color: rgba(255, 193, 7, 0.15);
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.password-requirements li {
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+}
+
+.password-requirements li.valid {
+    color: #198754;
+}
+
+.nav-tabs .nav-link {
+    color: #6c757d;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link.active {
+    color: #4e73df;
+    background-color: transparent;
+    border-bottom: 3px solid #4e73df;
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    border-bottom: 3px solid #e9ecef;
+}

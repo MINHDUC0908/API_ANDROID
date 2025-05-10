@@ -73,7 +73,7 @@ class RatingController extends Controller
             }
     
             // Kiểm tra xem người dùng đã mua sản phẩm chưa 
-            $purchased = Order::where("user_id", $user)
+            $purchased = Order::where("user_id", $user)->where("status", "pending")
                 ->whereHas('orderItems', function($query) use ($product_id) {
                     $query->where("product_id", $product_id);
                 })

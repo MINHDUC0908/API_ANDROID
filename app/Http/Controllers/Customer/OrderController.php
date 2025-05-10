@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Customer;
 
+use App\Events\OrderPlaced;
 use App\Http\Controllers\Controller;
 use App\Mail\PaymentSuccess;
 use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Coupon;
 use App\Models\LoyaltyPoint;
 use App\Models\Order;
@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+
 
 class OrderController extends Controller
 {
@@ -58,7 +59,7 @@ class OrderController extends Controller
                     'message' => 'Giá trị đơn hàng không hợp lệ'
                 ], 400);
             }
-    
+
             $payment_method = $request->input('payment_method');
 
 
@@ -159,8 +160,10 @@ class OrderController extends Controller
                 $cart->cartItems()->where("checked", 1)->delete();
                 // Gửi email qua hàng đợi
                 Log::info('Sending email to: ' . $order->user->email); // Debug email
-                Mail::to($order->user->email)->queue(new PaymentSuccess($order, $cartItemsArray, $totalPrice));
+                Mail::to($request->user()->email)->queue(new PaymentSuccess($order, $cartItemsArray, $totalPrice));
                 DB::commit();
+                
+                event(new OrderPlaced(Auth::user(), $order));
     
                 return response()->json([
                     'status' => 'success',
@@ -176,6 +179,11 @@ class OrderController extends Controller
             {
                 DB::commit();
                 return $this->processZaloPay($order, $totalPrice, $user_id);
+            } else if ($payment_method === "paypal") 
+            {
+                DB::commit();
+                $momo = new PayPalController();
+                return $momo->createOrder($order, $totalPrice);
             } else {
                 DB::rollBack();
                 return response()->json([

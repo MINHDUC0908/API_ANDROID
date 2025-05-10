@@ -10,23 +10,26 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Customer\BrandController as CustomerBrandController;
 use App\Http\Controllers\Customer\CartController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\DiscountController;
+use App\Http\Controllers\Admin\StatisticsController;
+use App\Http\Controllers\Customer\AIPhoneSuggestionController;
 use App\Http\Controllers\Customer\CheckOrderController;
+use App\Http\Controllers\Customer\ColorController as CustomerColorController;
 use App\Http\Controllers\Customer\ContactController;
 use App\Http\Controllers\Customer\CouponController as CustomerCouponController;
+use App\Http\Controllers\Customer\DiscountController as CustomerDiscountController;
+use App\Http\Controllers\Customer\ForgotController;
 use App\Http\Controllers\Customer\LoyaltyController;
 use App\Http\Controllers\Customer\OrderController;
+use App\Http\Controllers\Customer\PayPalController;
 use App\Http\Controllers\Customer\ProductController as CustomerProductController;
 use App\Http\Controllers\Customer\ProfileController;
 use App\Http\Controllers\Customer\RatingController;
+use App\Http\Controllers\Customer\SearchController;
 use App\Http\Controllers\Customer\ShiipingController;
+use App\Http\Controllers\Shipper\OrderDeliveryController;
 use Illuminate\Support\Facades\Route;
 
-
-Route::get('/', function () {
-    return response()->json([
-        'message' => 'Welcome to the API!',
-    ]);
-});
 
 Route::post('/register', [ RegisterController::class, 'register']);
 Route::post('/login', [ LoginController::class, 'login']);
@@ -43,17 +46,16 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::post("image/store", [ImageController::class, 'store']);
 
-
-    Route::get("/incrementProduct", [CustomerProductController::class, "incrementProduct"]);
-
-    Route::get("/incrementBrand", [CustomerBrandController::class, 'index']);
-
-    Route::get('/getProductWithBrand', [CustomerBrandController::class, 'getProductWithBrand']);
-
-
-
-    Route::post("coupon/store", [CouponController::class, "store"]);
 });
+
+Route::get("/incrementBrand", [CustomerBrandController::class, 'index']);
+
+Route::get("/incrementProduct", [CustomerProductController::class, "incrementProduct"]);
+Route::get('/getProductWithBrand', [CustomerBrandController::class, 'getProductWithBrand']);
+
+Route::get("product/{id}", [CustomerProductController::class, 'show']);
+
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::get('/user', [LoginController::class, 'user']);
@@ -88,10 +90,35 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Đánh giá
     Route::post("rating/store", [RatingController::class, "store"]);
+
+    Route::post("changePassword", [ForgotController::class, "changePassword"]);
 });
 
 Route::get("filter", [CustomerProductController::class, "filter"]);
+Route::get("products", [CustomerProductController::class, "index"]);
 Route::post("contact", [ContactController::class, "store"]);
 Route::get("rating", [RatingController::class, "index"]);
+Route::get("discount", [CustomerDiscountController::class, "index"]);
 
-// php artisan serve --host=192.168.1.98 --port=8000
+
+// Search
+Route::get("search", [SearchController::class, "search"]);
+
+// Quên mật khẩu 
+Route::post('/send-otp', [ForgotController::class, 'sendOtp']);
+Route::post('/verify-otp', [ForgotController::class, 'verifyOtp']);
+Route::post('/reset-password', [ForgotController::class, 'resetPassword']);
+
+Route::get('/search', [CustomerProductController::class, 'search']);
+
+Route::post('/chat', [AIPhoneSuggestionController::class, 'chat']);
+
+Route::get('/paypal/pay', [PayPalController::class, 'createOrder'])->name('paypal.pay');
+Route::get('/paypal/success', [PayPalController::class, 'success'])->name('paypal.success');
+Route::get('/paypal/cancel', [PayPalController::class, 'cancel'])->name('paypal.cancel');
+
+// php artisan serve --host=192.168.1.77 --port=8000
+
+
+// Route shipper
+require __DIR__.'/shipper.php';

@@ -39,7 +39,8 @@ class LoginController extends Controller
                         "phone" => $user->phone,
                         "gender" => $user->gender,
                         "birth_date" => $user->birth_date,
-                        "image" => $user->image
+                        "image" => $user->image,
+                        "role" => $user->role
                     ],
                     'token' => $token,
                 ],
@@ -73,7 +74,8 @@ class LoginController extends Controller
                 "phone" => $user->phone,
                 "gender" => $user->gender,
                 "birth_date" => $user->birth_date,
-                "image" => $user->image
+                "image" => $user->image,
+                "role" => $user->role
             ],
         ], 200);
     }

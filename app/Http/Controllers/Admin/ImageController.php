@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Color;
 use App\Models\Image;
 use App\Models\Product;
+use Exception;
 use Illuminate\Http\Request;
 
 class ImageController extends Controller
@@ -29,6 +31,7 @@ class ImageController extends Controller
                 $image = new Image();
                 $image->image_path = "products/" . $filename;
                 $image->product_id = $product->id;
+                $image->color_id = $request->input("color_id");
                 $image->save();
 
                 return response()->json([
@@ -49,6 +52,22 @@ class ImageController extends Controller
                 'message' => 'Đã xảy ra lỗi',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function index()
+    {
+        try {
+            $images = Image::paginate(10);
+            $products = Product::all();
+            $colors = Color::all();
+            return view("admin.image.index", compact("images", "products", "colors"));
+        } catch (Exception $e)
+        {
+            return response()->json([
+                "message" => "Đã xảy ra lỗi khi lấy dữ liệu!!!",
+                "error" => $e->getMessage()
+            ]);
         }
     }
 }

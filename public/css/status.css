@@ -1,0 +1,53 @@
+/* Style chung cho alert */
+.custom-alert {
+    background: linear-gradient(145deg, #28a745, #20c997); /* Màu nền cho thành công */
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+    max-width: 450px;
+    margin: 0 auto 1rem;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    transition: opacity 0.7s ease-in-out;
+}
+
+/* Style cho alert lỗi */
+.alert-error {
+    background: linear-gradient(145deg, #dc3545, #ff6b6b); /* Màu nền đỏ cho lỗi */
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
+/* Icon trong alert */
+.custom-alert .alert-icon-container {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Icon check (thành công) */
+.custom-alert .fa-check-circle {
+    font-size: 20px;
+}
+
+/* Icon lỗi */
+.alert-error .fa-check-circle {
+    color: #fff;
+    font-size: 20px;
+}
+
+/* Tiêu đề */
+.alert-heading {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Hiệu ứng fade out */
+.fading {
+    opacity: 0;
+}

@@ -24,7 +24,8 @@ class User extends Authenticatable
         'password',
         "phone",
         "gender",
-        "birth_date"
+        "birth_date",
+        "role"
     ];
 
     /**
@@ -48,5 +49,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function staffProfile()
+    {
+        return $this->hasOne(StaffProfile::class);
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Middleware\EnsureAuthenticated;
+use App\Http\Middleware\isAdmin;
+use App\Http\Middleware\IsShipper;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'auth:sanctum' => EnsureAuthenticated::class, // Tạo alias 'auth'
+            'isAdmin' => isAdmin::class, // Đăng ký alias isAdmin ở đây
+            'isShipper' => IsShipper::class, 
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

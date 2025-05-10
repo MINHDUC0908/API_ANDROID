@@ -3,46 +3,100 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
+use App\Models\Category;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BrandController extends Controller
 {
     public function index()
     {
-        $brands = Brand::all();
-        return response()->json([
-            "message" => "List of brands",
-            "data" => $brands
-        ]);
+        try {
+            $name = Auth::user()->name;
+            $brands = Brand::join('categories', 'categories.id', '=', 'brands.category_id')
+                            ->orderBy('brands.id', 'desc')
+                            ->select('brands.*', 'categories.category_name as category_name')
+                            ->paginate(10);
+
+            return view('admin.brand.list', compact('brands', 'name'));
+        } catch (Exception $e) {
+            return redirect()->route('brand.list')->with('error', 'An error occurred while fetching brands: ' . $e->getMessage());
+        }
     }
 
-    public function store(Request $request)
+    public function create()
+    {
+        try {
+            $name = Auth::user()->name;
+            $categories = Category::orderBy('id', 'desc')->get();
+            return view('admin.brand.add', compact('categories', 'name'));
+        } catch (Exception $e) {
+            return redirect()->route('brand.list')->with('error', 'An error occurred while fetching categories: ' . $e->getMessage());
+        }
+    }
+
+    public function store(BrandRequest $request)
     {
         try {
             $brand = new Brand();
-            $brand->brand_name = $request->input("brand_name");
-            $brand->category_id = $request->input("category_id");
-            if ($request->hasFile("logo_brand")) {
-                $file = $request->file("logo_brand");
-                $filename = time() . "_" . $file->getClientOriginalName();
-                $file->move(public_path("brands"), $filename);
-                $brand->logo_brand = "brands/" . $filename;
-            }
+            $brand->brand_name = $request->input('brand_name');
+            $brand->category_id = $request->input('category_id');
+            $brand->save();
+            return redirect()->route('brand.list')->with('status', 'Brand added successfully');
+        } catch (Exception $e) {
+            return redirect()->route('brand.list')->with('error', 'An error occurred while adding the brand: ' . $e->getMessage());
+        }
+    }
 
+    public function show($id)
+    {
+        try {
+            $name = Auth::user()->name;
+            $brand = Brand::findOrFail($id);
+            return view('admin.brand.show', compact('brand', 'name'));
+        } catch (Exception $e) {
+            return redirect()->route('brand.list')->with('error', 'An error occurred while fetching the brand: ' . $e->getMessage());
+        }
+    }
+
+    public function edit($id)
+    {
+        try {
+            $name = Auth::user()->name;
+            $brand = Brand::findOrFail($id);
+            $categories = Category::orderBy('id', 'desc')->get();
+            return view('admin.brand.edit', compact('brand', 'categories', 'name'));
+        } catch (Exception $e) {
+            return redirect()->route('brand.list')->with('error', 'An error occurred while fetching the brand for editing: ' . $e->getMessage());
+        }
+    }
+
+    public function update(BrandRequest $request, $id)
+    {
+        try {
+            $brand = Brand::findOrFail($id);
+            $brand->brand_name = $request->input('brand_name');
+            $brand->category_id = $request->input('category_id');
             $brand->save();
 
-            return response()->json([
-                "message" => "Brand created successfully",
-                "data" => $brand
-            ]);
-        } catch (Exception $e)
-        {
-            return response()->json([
-                "message" => "Error creating brand",
-                "error" => $e->getMessage()
-            ], 500);
+            return redirect()->route('brand.list')->with('status', 'Brand updated successfully');
+        } catch (Exception $e) {
+            return redirect()->route('brand.list')->with('error', 'An error occurred while updating the brand: ' . $e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $brand = Brand::findOrFail($id);
+            $brand->delete();
+
+            return redirect()->route('brand.list')->with('status', 'Brand deleted successfully');
+        } catch (Exception $e) {
+            return redirect()->route('brand.list')->with('error', 'An error occurred while deleting the brand: ' . $e->getMessage());
         }
     }
 }

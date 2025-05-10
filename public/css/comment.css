@@ -1,0 +1,173 @@
+.table th:nth-child(1), 
+    .table td:nth-child(1) {
+        min-width: 250px;
+        max-width: 300px;
+    }
+
+    /* Đảm bảo tên sản phẩm không bị cắt quá nhiều */
+    .table td:nth-child(1) .text-truncate {
+        max-width: 230px;
+        overflow: hidden;
+    }
+
+    /* Tạo hiệu ứng khi hover vào tên sản phẩm */
+    .table td:nth-child(1) .fw-semibold {
+        display: inline-block;
+        max-width: 100%;
+        transition: all 3s;
+    }
+
+    .table td:nth-child(1):hover .fw-semibold {
+        overflow: visible;
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    /* Điều chỉnh các cột khác để cân đối */
+    .table th:nth-child(2),
+    .table td:nth-child(2) {
+        max-width: 150px;
+    }
+
+    .table th:nth-child(3),
+    .table td:nth-child(3) {
+        max-width: 250px;
+    }
+    /* Gradients */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    }
+    
+    /* Hover effects */
+    .comment-row:hover {
+        background-color: rgba(13, 110, 253, 0.05) !important;
+        transition: all 0.3s ease;
+    }
+    
+    .reply-row:hover {
+        background-color: rgba(13, 110, 253, 0.03) !important;
+    }
+    
+    /* Reply styling */
+    .reply-content {
+        border-left: 3px solid #198754;
+    }
+    
+    .reply-badge {
+        font-size: 0.7rem;
+        z-index: 1;
+    }
+    
+    /* Table styling */
+    .table th {
+        font-weight: 600;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .table-bordered th, .table-bordered td {
+        border-color: #e9ecef;
+    }
+    
+    /* Button styling */
+    .btn {
+        transition: all 0.3s;
+    }
+    
+    .btn-outline-primary {
+        border-width: 1.5px;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #0d6efd;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);
+    }
+    
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(220, 53, 69, 0.2);
+    }
+    
+    /* Comment content styling */
+    .comment-content {
+        border-left: 3px solid #0d6efd;
+    }
+    
+    /* Icons styling */
+    .product-icon, .user-avatar {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Pagination styling */
+    .pagination .page-link {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 3px;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+    
+    /* Animation */
+    .animate__animated {
+        animation-duration: 0.5s;
+    }
+    
+    /* Add needed animate.css classes */
+    .animate__fadeIn {
+        animation-name: fadeIn;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .reply-content {
+            margin-left: 0 !important;
+        }
+    }
+    .reply-form {
+        max-width: 95%;
+        font-size: 0.875rem;
+    }
+
+    .reply-form .form-control-sm {
+        height: 32px;
+        font-size: 0.875rem;
+    }
+
+    .reply-form .btn-sm {
+        height: 32px;
+        width: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .reply-form .form-text {
+        font-size: 0.75rem;
+    }
+
+    .reply-form .badge {
+        font-size: 0.7rem;
+    }

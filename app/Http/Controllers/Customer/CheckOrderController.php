@@ -85,7 +85,7 @@ class CheckOrderController extends Controller
                 "data" => $order->orderItems->map(function ($item) {
                     return [
                         'quantity' => $item->quantity,
-                        'price' => $item->product->price,
+                        'discounted_price' => $item->product->discounted_price,
                         'product_name' => $item->product->product_name ?? null,
                         'product_image' => $item->product->images->first()->image_path ?? null,
                         'color_name' => $item->color->name ?? null,

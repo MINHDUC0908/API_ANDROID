@@ -12,7 +12,7 @@ class ProductController extends Controller
     public function incrementProduct()
     {
         try {
-            $topViewedProducts = Product::orderBy('view_count', 'desc')->with('images')
+            $topViewedProducts = Product::orderBy('view_count', 'desc')->with(['images', "discount"])
                                 ->take(6)
                                 ->get();
             return response()->json([
@@ -28,12 +28,30 @@ class ProductController extends Controller
         }
     }
 
+    public function index(Request $request)
+    {
+        try {
+            $products = Product::with(['brand', 'category', 'images', 'colors'])->withAvg('rating', 'rating')
+                ->has('colors')
+                ->get(); // lấy tất cả sản phẩm
+            return response()->json([
+                "message" => "List of products",
+                "data" => $products
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => "Error fetching products",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function filter(Request $request)
     {
         try {
             $sortType = $request->query('sortType'); // nhận sortType từ client
             $priceRange = $request->query("priceRange");
-            $products = Product::with(['brand', 'category', 'images', 'colors'])
+            $products = Product::with(['brand', 'category', 'images', 'colors', "discount"])->withAvg('rating', 'rating')
                 ->has('colors'); 
 
 
@@ -60,7 +78,7 @@ class ProductController extends Controller
                     $products->orderBy('product_name', 'desc');
                     break;
                 case 'rating_desc':
-                    $products = Product::withAvg('rating', 'rating')
+                    $products = Product::withAvg('rating', 'rating')->with(['brand', 'category', 'images', 'colors'])
                     ->orderByDesc('rating_avg_rating');
                     break;
                 default:
@@ -77,6 +95,50 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 "message" => "Error fetching products",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    public function show($id)
+    {
+        try {
+            $product = Product::with(['brand', 'category', 'images.color', "colors"])->find($id);
+            $product->increment('view_count');
+            if (!$product) {
+                return response()->json([
+                    "message" => "Product not found"
+                ], 404);
+            }
+            return response()->json([
+                "message" => "Product details",
+                "data" => $product
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => "Error fetching product",
+                "error" => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    public function search(Request $request)
+    {
+        try {
+            $keyword = $request->query('keyword');
+            $products = Product::with(['brand', 'category', 'images', 'colors'])->withAvg('rating', 'rating')
+                ->where('product_name', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('description', 'LIKE', '%' . $keyword . '%')
+                ->get();
+            return response()->json([
+                "message" => "List of products",
+                "data" => $products
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                "message" => "Error searching products",
                 "error" => $e->getMessage()
             ], 500);
         }

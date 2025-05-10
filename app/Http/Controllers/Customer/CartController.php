@@ -50,7 +50,7 @@ class CartController extends Controller
 
             if ($cartItem) {
                 $cartItem->quantity += $quantity;
-                $cartItem->total = $cartItem->quantity * $product->price;
+                $cartItem->total = $cartItem->quantity * $product->discounted_price;
                 $cartItem->save();
             } else {
                 $cart->cartItems()->create([
@@ -58,7 +58,7 @@ class CartController extends Controller
                     'product_id' => $product_id,
                     'color_id' => $color_id,
                     'quantity' => $quantity,
-                    'total' => $quantity * $product->price,
+                    'total' => $quantity * $product->discounted_price,
                 ]);
             }
 
@@ -69,7 +69,7 @@ class CartController extends Controller
                     'product_id' => $product_id,
                     'color_id' => $color_id,
                     'quantity' => $quantity,
-                    'total' => $quantity * $product->price,
+                    'total' => $quantity * $product->discounted_price,
                 ],
             ], 201);
 
