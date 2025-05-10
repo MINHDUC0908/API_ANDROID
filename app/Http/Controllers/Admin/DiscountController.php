@@ -25,6 +25,19 @@ class DiscountController extends Controller
             ]);
         }
     }
+    public function create()
+    {
+        try {
+            $products = Product::doesntHave('discount')->orderBy('created_at', 'desc')->get();
+            return view("admin.discount.create", compact("products"));
+        } catch (Exception $e)
+        {
+            return response()->json([
+                'message' => "Lỗi khi tải sản phẩm",
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
     public function store(Request $request)
     {
         $request->validate([

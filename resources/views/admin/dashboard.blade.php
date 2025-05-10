@@ -590,6 +590,80 @@
             </div>
         </div>
     </div>
+
+    <!-- Sản phẩm chưa được bán -->
+    <div class="col-md-12 mb-4">
+        <div class="card card-dashboard h-100">
+            <div class="card-header-custom d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="bi bi-box-seam text-danger me-2"></i>
+                    Sản phẩm chưa được bán
+                </div>
+                <a href="" class="btn btn-sm btn-outline-danger">Xem tất cả</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Ngày thêm</th>
+                                <th>Giảm giá sản phẩm</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($unsoldProducts ?? [] as $product)
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ asset($product->images ?  $product->images[0]->image_path : 'imageProduct/default.png') }}"
+                                            alt="" class="user-avatar me-2">
+                                        <div>{{ $product->product_name }}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="date-badge">
+                                        <i class="bi bi-calendar-date me-1"></i>
+                                        {{ \Carbon\Carbon::parse($product->created_at)->format('d/m/Y') }}
+                                    </span>
+                                </td>
+                                <td>
+                                    @if($product->discount)
+                                        <span class="badge bg-success rounded-pill px-3 py-2 fw-bold">
+                                            {{ $product->discount->discount_value }}%
+                                        </span>
+                                    @else
+                                        <span class="badge bg-secondary rounded-pill px-3 py-2 fw-bold">
+                                            Không có
+                                        </span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="{{ route('product.show', $product->id) }}" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-outline-warning">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center py-4">
+                                    <i class="bi bi-box text-danger fs-4 d-block mb-2"></i>
+                                    Tất cả sản phẩm đều đã được bán
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Biểu đồ thống kê -->
     <div class="row">
@@ -601,7 +675,7 @@
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
-                        <canvas id="revenueChart"></canvas>
+                        <canvas id="dailyRevenueChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -725,5 +799,36 @@
             }
         });
     });
+    // Doanh thu theo tuần
+        fetchChartData('/api/statistics/weeklyRevenueStats', data => {
+            new Chart(document.getElementById('weeklyRevenueChart'), {
+                type: 'line',
+                data: {
+                    labels: data.map(item => 'Tuần ' + item.week + ' - ' + item.year),
+                    datasets: [{
+                        label: 'Doanh thu tuần',
+                        data: data.map(item => item.revenue),
+                        borderColor: '#FF6384',
+                        fill: false,
+                    }]
+                },
+                options: { responsive: true }
+            });
+        });
+                fetchChartData('/api/statistics/dailyRevenueStats', data => {
+            new Chart(document.getElementById('dailyRevenueChart'), {
+                type: 'line',
+                data: {
+                    labels: data.map(item => item.date),
+                    datasets: [{
+                        label: 'Doanh thu ngày',
+                        data: data.map(item => item.revenue),
+                        borderColor: '#36A2EB',
+                        fill: false,
+                    }]
+                },
+                options: { responsive: true }
+            });
+        });
 </script>
 @endsection

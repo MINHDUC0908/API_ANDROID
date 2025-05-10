@@ -83,6 +83,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
 
     Route::prefix("discount")->name("discount.")->group(function() {
         Route::get("discount", [DiscountController::class, 'index'])->name("index");
+        Route::get("create", [DiscountController::class, 'create'])->name("create");
         Route::post("store", [DiscountController::class, 'store'])->name("store");
         Route::put("update/{id}", [DiscountController::class, 'update'])->name("update");
         Route::delete("destroy/{id}", [DiscountController::class, 'destroy'])->name("destroy");

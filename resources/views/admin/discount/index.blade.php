@@ -52,8 +52,10 @@
                 <i class="fas fa-tag me-1"></i>
                 Danh sách giảm giá
             </div>
-            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addDiscountModal">
-                <i class="fas fa-plus-circle me-1"></i> Thêm giảm giá mới
+            <button>
+                <a href="{{ route('discount.create') }}">
+                    <i class="fas fa-plus-circle me-1"></i> Thêm giảm giá mới
+                </a>
             </button>
         </div>
         <div class="card-body">
@@ -139,164 +141,28 @@
 </div>
 
 
-<!-- Add Discount Modal -->
-<div class="modal fade" id="addDiscountModal" tabindex="-1" aria-labelledby="addDiscountModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="addDiscountModalLabel">Thêm giảm giá mới</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{route("discount.store")}}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="product_id" class="form-label">Sản phẩm <span class="text-danger">*</span></label>
-                            <select class="form-select" id="product_id" name="product_id" required>
-                                @foreach($products as $product)
-                                    @if(!$discounts->contains('product_id', $product->id))
-                                        <option value="{{ $product->id }}">{{ $product->product_name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>                            
-                            @error('product_id')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
+    @foreach ($discounts as $discount)
+        <div class="modal fade" id="deleteDiscountModal-{{$discount->id}}" tabindex="-1" aria-labelledby="deleteDiscountModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteDiscountModalLabel">Xác nhận xóa</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="discount_type" class="form-label">Loại giảm giá <span class="text-danger">*</span></label>
-                            <select class="form-select" id="discount_type" name="discount_type" required>
-                                <option value="percent">Phần trăm (%)</option>
-                                <option value="fixed">Số tiền cố định (VNĐ)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="discount_value" class="form-label">Giá trị <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" id="discount_value" name="discount_value" min="0" step="0.01" required>
-                        </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc chắn muốn xóa giảm giá này không?</p>
+                        <p class="text-danger"><small>Hành động này không thể hoàn tác.</small></p>
                     </div>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="start_date" class="form-label">Ngày bắt đầu</label>
-                            <input type="datetime-local" class="form-control" id="start_date" name="start_date">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="end_date" class="form-label">Ngày kết thúc</label>
-                            <input type="datetime-local" class="form-control" id="end_date" name="end_date">
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="status" name="status" value="1" checked>
-                                <label class="form-check-label" for="status">Kích hoạt</label>
-                            </div>
-                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <form id="deleteDiscountForm" method="POST" action="{{route("discount.destroy", $discount->id)}}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Xóa</button>
+                        </form>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Lưu</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-@foreach ($discounts as $discount)
-<div class="modal fade" id="editDiscountModal-{{$discount->id}}" tabindex="-1" aria-labelledby="editDiscountModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-warning">
-                <h5 class="modal-title" id="editDiscountModalLabel">Chỉnh sửa giảm giá</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('discount.update', $discount->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="edit_product_id_{{$discount->id}}" class="form-label">Sản phẩm <span class="text-danger">*</span></label>
-                            <select class="form-select" id="edit_product_id_{{$discount->id}}" name="product_id" required>
-                                @foreach($products as $product)
-                                    <option value="{{ $product->id }}" {{ $product->id == $discount->product_id ? 'selected' : '' }}>
-                                        {{ $product->product_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="edit_discount_type_{{$discount->id}}" class="form-label">Loại giảm giá <span class="text-danger">*</span></label>
-                            <select class="form-select" id="edit_discount_type_{{$discount->id}}" name="discount_type" required>
-                                <option value="percent" {{ $discount->discount_type == 'percent' ? 'selected' : '' }}>Phần trăm (%)</option>
-                                <option value="fixed" {{ $discount->discount_type == 'fixed' ? 'selected' : '' }}>Số tiền cố định (VNĐ)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="edit_discount_value_{{$discount->id}}" class="form-label">Giá trị <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control" id="edit_discount_value_{{$discount->id}}" name="discount_value" min="0" step="0.01" value="{{ $discount->discount_value }}" required>
-                        </div>
-                    </div>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="edit_start_date_{{$discount->id}}" class="form-label">Ngày bắt đầu</label>
-                            <input type="datetime-local" class="form-control" id="edit_start_date_{{$discount->id}}" name="start_date" value="{{ $discount->start_date }}">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="edit_end_date_{{$discount->id}}" class="form-label">Ngày kết thúc</label>
-                            <input type="datetime-local" class="form-control" id="edit_end_date_{{$discount->id}}" name="end_date" value="{{ $discount->end_date }}">
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="edit_status_{{$discount->id}}" name="status" value="1" {{ $discount->status == 1 ? 'checked' : '' }}>
-                                <label class="form-check-label" for="edit_status_{{$discount->id}}">Kích hoạt</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-warning">Cập nhật</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="deleteDiscountModal-{{$discount->id}}" tabindex="-1" aria-labelledby="deleteDiscountModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="deleteDiscountModalLabel">Xác nhận xóa</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Bạn có chắc chắn muốn xóa giảm giá này không?</p>
-                <p class="text-danger"><small>Hành động này không thể hoàn tác.</small></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <form id="deleteDiscountForm" method="POST" action="{{route("discount.destroy", $discount->id)}}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Xóa</button>
-                </form>
             </div>
         </div>
-    </div>
-</div>
-@endforeach
+    @endforeach
 @endsection

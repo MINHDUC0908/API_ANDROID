@@ -50,6 +50,7 @@ class DashbroadController extends Controller
         // Sự kiện 
         $recent_activities = RecentActivity::with('user')
             ->orderBy('created_at', 'desc')
+            ->take(5)
             ->get()
             ->map(function ($activity) {
                 $data = $activity->activity_data;
@@ -59,7 +60,14 @@ class DashbroadController extends Controller
                 $activity->order_number = $data['order_number'] ?? null;
                 return $activity;
             });
-
-        return view("admin.dashboard", compact('name', 'user', 'product', 'order', 'countOrder', 'colors','recentUsers', "recentOrders", "topProducts", "recent_activities"));
+        
+        // Sản phẩm chưa được bán
+        $unsoldProducts = Product::whereDoesntHave('orderItems', function ($query) {
+            $query->whereNotNull('product_id');
+                })->with(['category', 'images', 'colors',"discount"])->withAvg('rating', 'rating')
+                ->has('colors')
+                ->get();
+    
+        return view("admin.dashboard", compact('name', 'user', 'product', 'order', 'countOrder', 'colors','recentUsers', "recentOrders", "topProducts", "recent_activities", 'unsoldProducts'));
     }
 }

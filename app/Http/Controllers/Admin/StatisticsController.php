@@ -17,7 +17,7 @@ class StatisticsController extends Controller
         $data = DB::table('orders')
             ->select(
                 DB::raw('MONTH(created_at) as month'),
-                DB::raw('SUM(total_price) as revenue')
+                DB::raw('SUM(total_amount) as revenue')
             )
             ->where('status', 'completed')
             ->groupBy('month')
@@ -37,7 +37,7 @@ class StatisticsController extends Controller
     public function weeklyRevenueStats()
     {
         $data = DB::table('orders')
-            ->select(DB::raw('YEAR(created_at) as year, WEEK(created_at) as week, SUM(total_price) as revenue'))
+            ->select(DB::raw('YEAR(created_at) as year, WEEK(created_at) as week, SUM(total_amount) as revenue'))
             ->groupBy(DB::raw('YEAR(created_at), WEEK(created_at)'))
             ->orderBy('year', 'desc')
             ->orderBy('week', 'desc')
@@ -48,7 +48,7 @@ class StatisticsController extends Controller
     {
         // Truy vấn doanh thu theo ngày
         $data = DB::table('orders')
-            ->select(DB::raw('DATE(created_at) as date, SUM(total_price) as revenue'))
+            ->select(DB::raw('DATE(created_at) as date, SUM(total_amount) as revenue'))
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date', 'desc')
             ->get();
