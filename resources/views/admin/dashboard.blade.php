@@ -486,7 +486,6 @@
     
     <!-- Đơn hàng gần đây và Sản phẩm bán chạy -->
     <div class="row">
-        <!-- Đơn hàng gần đây -->
         <div class="col-md-6 mb-4">
             <div class="card card-dashboard h-100">
                 <div class="card-header-custom d-flex justify-content-between align-items-center">
