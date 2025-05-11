@@ -73,18 +73,23 @@
    ```
 ### 3. Cài Đặt Cơ Sở Dữ Liệu
 
-1. Bảng categories
+### 1. Bảng `categories`
 
-CREATE TABLE ategories (
+```sql
+CREATE TABLE categories (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     category_name VARCHAR(255) COLLATE utf8mb4_unicode_ci,
     created_at TIMESTAMP NULL,
     updated_at TIMESTAMP NULL,
     PRIMARY KEY (id)
-)
+);
+```
 
-2. Bảng brands
+---
 
+### 2. Bảng `brands`
+
+```sql
 CREATE TABLE brands (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     brand_name VARCHAR(255) COLLATE utf8mb4_unicode_ci,
@@ -94,10 +99,15 @@ CREATE TABLE brands (
     updated_at TIMESTAMP NULL,
     view INT(11) DEFAULT 0,
     PRIMARY KEY (id),
-    FOREIGN KEY (category_id) REFERENCES category(id)
-)
+    FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+```
 
-3. Bảng products
+---
+
+### 3. Bảng `products`
+
+```sql
 CREATE TABLE products (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     product_name VARCHAR(255) COLLATE utf8mb4_unicode_ci,
@@ -109,9 +119,11 @@ CREATE TABLE products (
     updated_at TIMESTAMP NULL,
     view_count INT(11) DEFAULT 0,
     PRIMARY KEY (id),
-    FOREIGN KEY (brand_id) REFERENCES brand(id),
-    FOREIGN KEY (category_id) REFERENCES category(id)
-) 
+    FOREIGN KEY (brand_id) REFERENCES brands(id),
+    FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+```
+
 
 4. Bảng images
 CREATE TABLE images (
