@@ -74,14 +74,13 @@
 ### 3. Cài Đặt Cơ Sở Dữ Liệu
 
 1. Bảng categories
-
-CREATE TABLE ategories (
+sqlCREATE TABLE categories (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     category_name VARCHAR(255) COLLATE utf8mb4_unicode_ci,
     created_at TIMESTAMP NULL,
     updated_at TIMESTAMP NULL,
     PRIMARY KEY (id)
-)
+);
 
 2. Bảng brands
 
