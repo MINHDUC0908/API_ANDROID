@@ -674,11 +674,39 @@
             <div class="card card-dashboard">
                 <div class="card-header-custom">
                     <i class="bi bi-graph-up text-primary me-2"></i>
-                    Doanh thu trong 7 ngày qua
+                    Doanh thu theo ngày
                 </div>
                 <div class="card-body">
                     <div class="chart-container">
                         <canvas id="dailyRevenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card card-dashboard">
+                <div class="card-header-custom">
+                    <i class="bi bi-graph-up text-primary me-2"></i>
+                    Doanh thu theo tuần
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="weeklyRevenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card card-dashboard">
+                <div class="card-header-custom">
+                    <i class="bi bi-graph-up text-primary me-2"></i>
+                    Doanh thu theo tháng
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="monthlyRevenueChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -785,6 +813,21 @@
             .then(callback)
             .catch(error => console.error('Lỗi tải dữ liệu:', error));
     }
+    // Doanh thu theo tháng
+    fetchChartData('/api/statistics/monthly-revenue', data => {
+        new Chart(document.getElementById('monthlyRevenueChart'), {
+            type: 'bar',
+            data: {
+                labels: data.map(item => 'Tháng ' + item.month),
+                datasets: [{
+                    label: 'Doanh thu (VNĐ)',
+                    data: data.map(item => item.revenue),
+                    backgroundColor: '#4facfe',
+                }]
+            },
+            options: { responsive: true }
+        });
+    });
     fetchChartData('/api/statistics/orderStatusStats', data => {
         new Chart(document.getElementById('orderStatusChart'), {
             type: 'pie',
@@ -803,35 +846,37 @@
         });
     });
     // Doanh thu theo tuần
-        fetchChartData('/api/statistics/weeklyRevenueStats', data => {
-            new Chart(document.getElementById('weeklyRevenueChart'), {
-                type: 'line',
-                data: {
-                    labels: data.map(item => 'Tuần ' + item.week + ' - ' + item.year),
-                    datasets: [{
-                        label: 'Doanh thu tuần',
-                        data: data.map(item => item.revenue),
-                        borderColor: '#FF6384',
-                        fill: false,
-                    }]
-                },
-                options: { responsive: true }
-            });
+    fetchChartData('/api/statistics/weeklyRevenueStats', data => {
+        new Chart(document.getElementById('weeklyRevenueChart'), {
+            type: 'line',
+            data: {
+                labels: data.map(item => 'Tuần ' + item.week + ' - ' + item.year),
+                datasets: [{
+                    label: 'Doanh thu tuần',
+                    data: data.map(item => item.revenue),
+                    borderColor: '#FF6384',
+                    fill: false,
+                }]
+            },
+            options: { responsive: true }
         });
-                fetchChartData('/api/statistics/dailyRevenueStats', data => {
-            new Chart(document.getElementById('dailyRevenueChart'), {
-                type: 'line',
-                data: {
-                    labels: data.map(item => item.date),
-                    datasets: [{
-                        label: 'Doanh thu ngày',
-                        data: data.map(item => item.revenue),
-                        borderColor: '#36A2EB',
-                        fill: false,
-                    }]
-                },
-                options: { responsive: true }
-            });
+    });
+
+    // Danh sách sản phẩm bán chạy
+    fetchChartData('/api/statistics/dailyRevenueStats', data => {
+        new Chart(document.getElementById('dailyRevenueChart'), {
+            type: 'line',
+            data: {
+                labels: data.map(item => item.date),
+                datasets: [{
+                    label: 'Doanh thu ngày',
+                    data: data.map(item => item.revenue),
+                    borderColor: '#36A2EB',
+                    fill: false,
+                }]
+            },
+            options: { responsive: true }
         });
+    });
 </script>
 @endsection

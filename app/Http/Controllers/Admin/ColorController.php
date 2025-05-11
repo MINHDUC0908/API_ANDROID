@@ -10,11 +10,41 @@ use Illuminate\Support\Facades\Auth;
 
 class ColorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $name = Auth::user()->name;
-        $colors = Color::orderBy("id", "DESC")->paginate(15);
-        return view('admin.colors.list', compact('name', 'colors'));
+        $query = Color::with('product')->orderBy("id", "DESC");
+        
+        // Áp dụng bộ lọc nếu có
+        if ($request->has('product_id') && $request->product_id) {
+            $query->where('product_id', $request->product_id);
+        }
+        
+        if ($request->has('color') && $request->color) {
+            $query->where('name', 'LIKE', '%' . $request->color . '%')
+                ->orWhere('color', 'LIKE', '%' . $request->color . '%');
+        }
+        
+        if ($request->has('stock_status')) {
+            switch ($request->stock_status) {
+                case 'out_of_stock':
+                    $query->where('quantity', 0);
+                    break;
+                case 'low_stock':
+                    $query->whereBetween('quantity', [1, 10]);
+                    break;
+                case 'in_stock':
+                    $query->where('quantity', '>', 10);
+                    break;
+            }
+        }
+        
+        $colors = $query->paginate(15);
+        
+        // Lấy danh sách các sản phẩm để hiển thị trong dropdown
+        $products = Product::select('id', 'product_name')->orderBy('product_name')->get();
+        
+        return view('admin.colors.list', compact('name', 'colors', 'products'));
     }
     public function create()
     {
