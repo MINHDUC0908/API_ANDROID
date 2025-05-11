@@ -73,15 +73,17 @@
    ```
 ### 3. Cài Đặt Cơ Sở Dữ Liệu
 
-1. Bảng categories
+### 1. Bảng `categories`
 
-CREATE TABLE ategories (
+```sql
+CREATE TABLE categories (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     category_name VARCHAR(255) COLLATE utf8mb4_unicode_ci,
     created_at TIMESTAMP NULL,
     updated_at TIMESTAMP NULL,
     PRIMARY KEY (id)
-)
+);
+```
 
 ### 2. Bảng `brands`
 
@@ -121,7 +123,9 @@ CREATE TABLE products (
 ```
 
 
-4. Bảng images
+### 4. Bảng images
+
+```sql
 CREATE TABLE images (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     image_path TEXT COLLATE utf8mb4_unicode_ci,
@@ -133,8 +137,11 @@ CREATE TABLE images (
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (color_id) REFERENCES colors(id)
 ) 
+```
 
-5. Bảng colors
+### 5. Bảng colors
+
+```sql
 CREATE TABLE colors (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) COLLATE utf8mb4_unicode_ci,
@@ -146,8 +153,10 @@ CREATE TABLE colors (
     PRIMARY KEY (id),
     FOREIGN KEY (product_id) REFERENCES products(id)
 ) 
+```
+### 6. Bảng carts 
 
-6. Bảng carts 
+```sql
 CREATE TABLE carts (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id BIGINT(20) UNSIGNED,
@@ -157,8 +166,11 @@ CREATE TABLE carts (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 ) 
+```
 
-7. Bảng cart_items 
+### 7. Bảng cart_items 
+
+```sql
 CREATE TABLE cart_items (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     cart_id BIGINT(20) UNSIGNED,
@@ -174,9 +186,11 @@ CREATE TABLE cart_items (
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (color_id) REFERENCES colors(id)
 ) 
+```
 
+### 8. Bảng shipping_address
 
-8. Bảng shipping_address
+```sql
 CREATE TABLE shipping_address (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id BIGINT(20) UNSIGNED,
@@ -191,6 +205,7 @@ CREATE TABLE shipping_address (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 ) 
+```
 
 9. Bảng orders
 CREATE TABLE orders (
