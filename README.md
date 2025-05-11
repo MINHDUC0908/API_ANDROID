@@ -10,6 +10,7 @@
 - **Xác thực người dùng:** Đăng ký và đăng nhập người dùng sử dụng Laravel Sanctum.
 - **Quản lý sản phẩm:** Tạo, cập nhật, xóa và hiển thị thông tin sản phẩm điện tử.
 - **Quản lý đơn hàng:** Tạo, theo dõi và quản lý trạng thái đơn hàng.
+- **Tích hợp các thanh toán trực tuyến:** VNPAY, ZALOPAY, PAYPAL.
 - **Quản lý danh mục sản phẩm:** Cho phép phân loại sản phẩm theo danh mục (ví dụ: điện thoại, máy tính, v.v.).
 - **Hỗ trợ tìm kiếm:** Cung cấp các phương thức tìm kiếm sản phẩm theo tên, loại và giá cả.
 
