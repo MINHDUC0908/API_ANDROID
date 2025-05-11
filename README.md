@@ -207,7 +207,9 @@ CREATE TABLE shipping_address (
 ) 
 ```
 
-9. Bảng orders
+### 9. Bảng orders
+
+```sql
 CREATE TABLE orders (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id BIGINT(20) UNSIGNED,
@@ -225,8 +227,11 @@ CREATE TABLE orders (
     FOREIGN KEY (shipping_address_id) REFERENCES shipping_address(id),
     FOREIGN KEY (coupon_id) REFERENCES coupon(id)
 ) 
+```
 
-10. Bảng order_items
+### 10. Bảng order_items
+
+```sql
 CREATE TABLE order_items (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     order_id BIGINT(20) UNSIGNED,
@@ -240,8 +245,11 @@ CREATE TABLE order_items (
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (color_id) REFERENCES colors(id)
 ) 
+```
 
-11. Bảng payments
+### 11. Bảng payments
+
+```sql
 CREATE TABLE payments (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     order_id BIGINT(20) UNSIGNED,
@@ -254,8 +262,11 @@ CREATE TABLE payments (
     PRIMARY KEY (id),
     FOREIGN KEY (order_id) REFERENCES orders(id)
 ) 
+```
 
-12. Bảng contacts
+### 12. Bảng contacts
+
+```sql
 CREATE TABLE contacts (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) COLLATE utf8mb4_unicode_ci,
@@ -267,8 +278,11 @@ CREATE TABLE contacts (
     updated_at TIMESTAMP NULL,
     PRIMARY KEY (id)
 ) 
+```
 
-13. Bảng coupons
+### 13. Bảng coupons
+
+```sql
 CREATE TABLE coupons(
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     code VARCHAR(255) COLLATE utf8mb4_unicode_ci,
@@ -279,8 +293,11 @@ CREATE TABLE coupons(
     updated_at TIMESTAMP NULL,
     PRIMARY KEY (id)
 )
+```
 
-14. Bảng vouchers
+### 14. Bảng vouchers
+
+```sql
 CREATE TABLE vouchers(
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     code VARCHAR(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -298,8 +315,11 @@ CREATE TABLE vouchers(
     PRIMARY KEY (id)
     FOREIGN KEY (user_id) REFERENCES users(id)
 )
+```
 
-15. Bảng loyalty_points
+### 15. Bảng loyalty_points
+
+```sql
 CREATE TABLE loyalty_points(
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id BIGINT(20) UNSIGNED DEFAULT NULL,
@@ -310,8 +330,11 @@ CREATE TABLE loyalty_points(
     PRIMARY KEY (id)
     FOREIGN KEY (user_id) REFERENCES users(id)
 )
+```
 
-16. Bảng point_transactions
+### 16. Bảng point_transactions
+
+```sql
 CREATE TABLE point_transactions(
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id BIGINT(20) UNSIGNED DEFAULT NULL,
@@ -323,8 +346,11 @@ CREATE TABLE point_transactions(
     PRIMARY KEY (id)
     FOREIGN KEY (user_id) REFERENCES users(id)
 )
+```
 
-17. Bảng ratings 
+### 17. Bảng ratings 
+
+```sql
 CREATE TABLE ratings(
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     product_id BIGINT(20),
@@ -338,8 +364,11 @@ CREATE TABLE ratings(
     FOREIGN KEY (product_id) REFERENCES products(id)
     FOREIGN KEY (user_id) REFERENCES users(id)
 )
+```
 
-18. Bảng discounts
+### 18. Bảng discounts
+
+```sql
 CREATE TABLE discounts(
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     product_id BIGINT(20),
@@ -352,8 +381,11 @@ CREATE TABLE discounts(
     PRIMARY KEY (id)
     FOREIGN KEY (product_id) REFERENCES products(id)
 )
+```
 
-19. Bảng users
+### 19. Bảng users
+
+```sql
 CREATE TABLE users (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -370,6 +402,7 @@ CREATE TABLE users (
     role ENUM('user', 'admin', 'shipper', 'staff') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user',
     PRIMARY KEY (id)
 )
+```
 
 ### 20. Bảng `staff_profile`
 
