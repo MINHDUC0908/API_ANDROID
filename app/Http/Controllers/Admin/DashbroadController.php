@@ -25,7 +25,7 @@ class DashbroadController extends Controller
         $user = User::count();  
         $product = Product::count();
         $order = Order::all();
-        $countOrder = Order::whereIn('status', ['pending','processing','completed','cancelled','accepted'])->count();
+        $countOrder = Order::whereIn('status', ['Completed','Cancel'])->count();
 
         $colors  = Color::where("quantity", "<", 10)->with(['product', 'images'])->take(5)->get();
         $recentUsers = User::orderBy('created_at', 'desc')->where('role', 'user')
@@ -57,7 +57,9 @@ class DashbroadController extends Controller
                 $activity->action = isset($data['action']) ? json_decode('"' . $data['action'] . '"') : null;
                 $activity->product_name = $data['product_name'] ?? null;
                 $activity->product_id = $data['product_id'] ?? null;
-                $activity->order_number = $data['order_number'] ?? null;
+                $activity->order_code = $data['order_code'] ?? null;
+                $activity->user_id = $data['user_id'] ?? null;
+                $activity->name = $data['name'] ?? null;
                 return $activity;
             });
         

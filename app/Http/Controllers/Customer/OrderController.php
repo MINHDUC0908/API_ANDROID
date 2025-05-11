@@ -110,7 +110,7 @@ class OrderController extends Controller
                 'shipping_address_id' => $shipping_id,
                 'total_amount' => $totalPrice,
                 'payment_method' => $payment_method,
-                'status' => 'pending',
+                'status' => 'Waiting for confirmation',
                 "payment_status" => 'unpaid',
                 'coupon_id' => $coupon ? $coupon->id : null,
                 "discount_amount" => $discount,
@@ -324,7 +324,7 @@ class OrderController extends Controller
             if ($response->successful() && $result['return_code'] == 1) {
                 if ($order) {
                     $order->payment_status = 'paid';
-                    $order->status = 'completed';
+                    $order->status = 'Processing';
                     $order->save();
 
                     $payment = Payment::where('transaction_id', $app_trans_id)->first();

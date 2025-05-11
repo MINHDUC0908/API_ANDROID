@@ -10,7 +10,7 @@ class OrderController extends Controller
 {
     public function order(Request $request)
     {
-        $status = $request->input('status', 'pending');
+        $status = $request->input('status', 'Waiting for confirmation');
         $orders = Order::where('status', $status)->orderBy("created_at", "DESC")->with(['user'])->paginate(25);
         return view('admin.order.order', compact('orders', 'status'));
     }

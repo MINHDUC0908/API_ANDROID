@@ -109,7 +109,7 @@ class VNPayController extends Controller
                 $order = Order::where('order_number', $vnp_TxnRef)->first();
                 if ($order) {
                     $order->payment_status = 'paid';
-                    $order->status = 'completed';
+                    $order->status = 'Processing';
                     $order->save();
 
                     $payment = Payment::where('transaction_id', $vnp_TxnRef)->first();

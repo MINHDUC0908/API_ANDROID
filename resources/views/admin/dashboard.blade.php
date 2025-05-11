@@ -569,9 +569,12 @@
                         <div class="activity-content">
                             <h6 class="activity-title">
                                 @if($activity->activity_type == 'order')
-                                    Đơn hàng #{{ $activity->order_number}} đã được {{ $activity->action ?? '' }} bởi {{ $activity->user->role}} {{ $activity->user->name }}
+                                    Đơn hàng #{{ $activity->order_code}} đã được {{ $activity->action ?? '' }} bởi Người dùng {{ $activity->user->name }}
                                 @elseif($activity->activity_type == 'product')
                                     Sản phẩm {{ $activity->product_name}} đã được {{ $activity->action ?? '' }} bởi {{ $activity->user->role}} {{ $activity->user->name }}
+                                @elseif($activity->activity_type == 'user')
+                                    Người dùng {{ $activity->user->name }} đã tự {{ $activity->action}} tài khoản của mình.
+
                                 @endif
                             </h6>
                             <span class="date-badge">

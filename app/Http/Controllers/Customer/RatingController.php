@@ -73,7 +73,7 @@ class RatingController extends Controller
             }
     
             // Kiểm tra xem người dùng đã mua sản phẩm chưa 
-            $purchased = Order::where("user_id", $user)->where("status", "pending")
+            $purchased = Order::where("user_id", $user)->where("status", "Completed")
                 ->whereHas('orderItems', function($query) use ($product_id) {
                     $query->where("product_id", $product_id);
                 })
@@ -81,7 +81,7 @@ class RatingController extends Controller
     
             if (!$purchased) {
                 return response()->json([
-                    "message" => "Bạn cần phải mua sản phẩm trước khi đánh giá!!!"
+                    "message" => "Bạn cần nhận hàng trước khi gửi đánh giá nhé!"
                 ], 403); // Forbidden
             }
             

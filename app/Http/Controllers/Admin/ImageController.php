@@ -58,10 +58,8 @@ class ImageController extends Controller
     public function index()
     {
         try {
-            $images = Image::paginate(10);
-            $products = Product::all();
-            $colors = Color::all();
-            return view("admin.image.index", compact("images", "products", "colors"));
+            $images = Image::with(['product', 'color'])->get();
+            return view("admin.image.index", compact("images"));
         } catch (Exception $e)
         {
             return response()->json([

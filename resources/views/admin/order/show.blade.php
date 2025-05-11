@@ -286,18 +286,18 @@
                             <td>
                                 @php
                                     $statusClasses = [
-                                        'pending' => 'bg-warning-subtle text-warning border border-warning',
-                                        'processing' => 'bg-info-subtle text-info border border-info',
-                                        'completed' => 'bg-primary-subtle text-primary border border-primary',
-                                        'accepted' => 'bg-success-subtle text-success border border-success',
-                                        'cancel' => 'bg-danger-subtle text-danger border border-danger'
+                                        'Waiting for confirmation' => 'bg-warning-subtle text-warning border border-warning',
+                                        'Processing' => 'bg-info-subtle text-info border border-info',
+                                        'Delivering' => 'bg-primary-subtle text-primary border border-primary',
+                                        'Completed' => 'bg-success-subtle text-success border border-success',
+                                        'Cancel' => 'bg-danger-subtle text-danger border border-danger'
                                     ];
                                     $statusIcons = [
-                                        'pending' => 'fas fa-hourglass-half',
-                                        'processing' => 'fas fa-cogs',
-                                        'completed' => 'fas fa-truck',
-                                        'accepted' => 'fas fa-check-circle',
-                                        'cancel' => 'fas fa-times-circle'
+                                        'Waiting for confirmation' => 'fas fa-hourglass-half',
+                                        'Processing' => 'fas fa-cogs',
+                                        'Delivering' => 'fas fa-truck',
+                                        'Completed' => 'fas fa-check-circle',
+                                        'Cancel' => 'fas fa-times-circle'
                                     ];
                                 @endphp
                                 <span class="status-badge {{ $statusClasses[$order->status] }}">

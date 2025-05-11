@@ -13,6 +13,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\OrderPlaced::class => [
             \App\Listeners\LogOrderPlaced::class,
         ],
+        \App\Events\UserAdded::class => [
+            \App\Listeners\LogUserPlaced::class,
+        ],
     ];
 
     /**

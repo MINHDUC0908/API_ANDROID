@@ -71,7 +71,7 @@ class PayPalController extends Controller
             if (!$order) {
                 return response()->json(['error' => 'Order not found'], 404);
             }
-            $order->status = 'completed';
+            $order->status = 'Processing';
             $order->payment_status = 'paid';
             $order->save();
             $payment = Payment::where('transaction_id', $orderId)->first();

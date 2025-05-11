@@ -87,19 +87,19 @@
                                         @method('PUT')
                                         @php
                                             $statusIcons = [
-                                                'pending' => 'clock',
-                                                'processing' => 'sync',
-                                                'completed' => 'shipping-fast',
-                                                'accepted' => 'check-circle',
-                                                'cancel' => 'ban'
+                                                'Waiting for confirmation' => 'clock',
+                                                'Processing' => 'sync',
+                                                'Delivering' => 'shipping-fast',
+                                                'Completed' => 'check-circle',
+                                                'Cancel' => 'ban'
                                             ];
                                             
                                             $statusMap = [
-                                                'pending' => ['processing', 'btn-warning', 'Đang chờ xác nhận'],
-                                                'processing' => ['completed', 'btn-info', 'Đang xử lý'],
-                                                'completed' => ["accepted", 'btn-primary', 'Đang vận chuyển'],
-                                                'accepted' => [null, 'btn-success', 'Đã hoàn thành'],
-                                                'cancel' => [null, 'btn-secondary', 'Đã hủy']
+                                                'Waiting for confirmation' => ['Processing', 'btn-warning', 'Đang chờ xác nhận'],
+                                                'Processing' => ['Delivering', 'btn-info', 'Đang xử lý'],
+                                                'Delivering' => ["Completed", 'btn-primary', 'Đang vận chuyển'],
+                                                'Completed' => [null, 'btn-success', 'Đã hoàn thành'],
+                                                'Cancel' => [null, 'btn-secondary', 'Đã hủy']
                                             ];
                                         @endphp
                                         @if ($statusMap[$order->status][0])
