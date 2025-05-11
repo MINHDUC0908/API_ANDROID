@@ -347,7 +347,9 @@ CREATE TABLE users (
     PRIMARY KEY (id)
 )
 
-20. Bảng staff_profile
+### 20. Bảng `staff_profile`
+
+```sql
 CREATE TABLE staff_profile (
     id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id BIGINT(20) UNSIGNED NOT NULL,
@@ -359,9 +361,11 @@ CREATE TABLE staff_profile (
     end_date DATE DEFAULT NULL,
     created_at TIMESTAMP NULL DEFAULT NULL,
     updated_at TIMESTAMP NULL DEFAULT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id)
-)
+);
+```
+
 
 
 ### 4. Chạy Dự Án
